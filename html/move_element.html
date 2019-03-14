@@ -1,0 +1,43 @@
+<div id="move" class="move">Let's move!</div>
+<style>
+.move {
+border: 1px solid;
+border-radius: 10px;
+width: 200px;
+height: 100px;
+display: flex;
+align-items: center;
+justify-content: center;
+cursor: move;
+user-select: none;
+}
+</style>
+<script>
+elements = document.getElementsByClassName('move');
+for (i = 0; i < elements.length; i++) {
+  let element = elements[i];
+  element.setAttribute('mouseX', 0);
+  element.setAttribute('mouseY', 0);
+  element.onmousedown = function (e) {
+    if (this.style.transform) {
+      this.setAttribute('x', e.offsetX + Number(this.style.transform.split('(')[1].split(')')[0].split(', ')[0].replace('px', '')));
+      this.setAttribute('y', e.offsetY + Number(this.style.transform.split('(')[1].split(')')[0].split(', ')[1].replace('px', '')));
+    } else {
+      this.setAttribute('x', e.offsetX);
+      this.setAttribute('y', e.offsetY);
+    }
+    this.setAttribute('moving', true);
+  }
+  element.onmousemove = function(e) {
+    if (this.hasAttribute('moving')) {
+      x = e.offsetX - Number(this.getAttribute('x'));
+      y = e.offsetY - Number(this.getAttribute('y'));
+      console.log(x, y);
+      this.style.transform = `translate3d(${x}px, ${y}px, 0px)`;
+    }
+  }
+  element.onmouseup = function (e) {
+    this.removeAttribute('moving');
+  }
+}
+</script>
